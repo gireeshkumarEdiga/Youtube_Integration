@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #signin {
+            width: 200px;
+        }
+        input {
+            margin-top: 20px;
+            padding: 2% 0%;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div id="signin">
+            <form onsubmit="signin(event)" id="signin-form">
+                <h1>sign-in</h1>
+                <input type="password" id="password" placeholder="password">
+                <input type="text" id="username" placeholder="username">
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    function signin(e){
+        e.preventDefault();
+
+        let form = document.getElementById("signin-form");
+
+        let user_data = {
+            password : form.password.value,
+            username : form.username.value,
+        };
+        console.log(user_data)
+
+        let data_to_send = JSON.stringify(user_data);
+
+        fetch("https://masai-api-mocker.herokuapp.com/auth/login",{
+
+            method : "POST",
+
+            body : data_to_send,
+
+            headers : {
+                'Content-Type' : "application/json",
+            },
+        })
+        .then((res)=>{
+            return res.json();
+        })
+        .then((res)=>{
+            console.log("res:",res);
+
+            fetchmyData(user_data.username, res.token)
+        })
+        .catch((err)=>{
+            console.log("err:",err);
+        })
+    }
+
+
+
+    function fetchmyData(username, token){
+
+        fetch(`https://masai-api-mocker.herokuapp.com/user/${username}`,{
+
+            headers : {
+                'Content-Type' : "application/json",
+
+                Authorization : `Bearer ${token}`,
+            },
+        })
+        .then((res)=>{
+            return res.json();
+        })
+        .then((res)=>{
+            console.log("res:",res);
+        })
+        .catch((err)=>{
+            console.log("err:",err);
+        })
+    }
+
+
+</script>

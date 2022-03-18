@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #navbar {
+            /* padding: 0% 20%; */
+            border : 1px solid black;
+            background-color: brown;
+        }
+        input {
+            width: 500px;
+            margin: 20px;
+            height: 30px;
+        }
+        button {
+            height : 30px;
+        }
+        #videos {
+            display: grid;
+            grid-template-columns: repeat(4,20%);
+            grid-gap:5%
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar">
+    <input type="text" id="query" placeholder="search for a video" />
+
+    <button onclick="searchVideos()">search</button>
+
+    <div id="videos">
+    </div>
+</body>
+</html>
+
+
+<script>
+
+    //AIzaSyDmjUnx9TAtNeJf-Tf4Yk_vMky6odzXgw0
+    //https://youtube.googleapis.com/youtube/v3/search?q=csk&type=video&key=[YOUR_API_KEY]
+ 
+ 
+     let videos = document.getElementById("videos");
+ 
+     async function searchVideos(){
+ 
+         let query = document.getElementById("query").value;
+ 
+         let videos = document.getElementById("video");
+ 
+         let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyDmjUnx9TAtNeJf-Tf4Yk_vMky6odzXgw0&maxResults=20`);
+ 
+         let data = await res.json();
+         console.log("data:",data);
+ 
+         appendvideos(data.items);
+     }
+ 
+     function appendvideos(video_data){
+         video_data.forEach(({id:{videoId}}) => {
+             console.log("video:",videoId);
+             let div = document.createElement("div");
+             div.innerHTML = `<iframe width="auto" height="315" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+             //div.style.width = "100px";
+             videos.append(div)
+         });
+     }
+ 
+ 
+ 
+     //https://youtube.googleapis.com/youtube/v3/search?key=[YOUR_API_KEY]
+ 
+ 
+ 
+     // let videos = document.getElementById("videos");
+ 
+     // let query = document.getElementById("query").value;
+ 
+     // async function searchVideos(){
+ 
+     //     let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q${query}&type=video&key=AIzaSyBBaLMwKk1_es07cfYSEy_9tbLufiNKv3Q`);
+ 
+     //     let data = await res.json();
+     //     console.log("data:",data);
+         
+     //     appendVideos(data.items);
+         
+     // }
+ 
+     // //searchVideos();
+ 
+     // function appendVideos(video_data){
+     //     video_data.forEach(({ id : {videoId }}) => {
+ 
+     //         // console.log("video:", videoId);
+ 
+     //         let div = document.createElement("div");
+ 
+     //         div.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+ 
+     //         videos.append(div);
+     //     });
+     // }
+ 
+ 
+ </script>
